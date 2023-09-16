@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Lift Master",
-    "slug": "LiftMaster",
+    "slug": "lift-master",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/appIcon.png",
@@ -40,6 +40,18 @@
           "initialOrientation": "PORTRAIT"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d1b4d92d-0a05-4172-919e-9c603c36c950"
+      }
+    },
+    "owner": "st_themaker01",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d1b4d92d-0a05-4172-919e-9c603c36c950"
+    }
   }
 }

@@ -64,9 +64,12 @@ export default function App() {
     Orbitron_400Regular
   })
 
-  const onReadyRootView = useCallback(async () => {
+  const onReadyRootView = useCallback(() => {
     if (fontsLoaded || fontError) {
-      await SplashScreen.hideAsync();
+      // await SplashScreen.hideAsync();
+
+      // Show splashscreen for at least 2 seconds
+      setTimeout(async () => await SplashScreen.hideAsync(), 2000)
     }
   }, [fontsLoaded, fontError]);
 
