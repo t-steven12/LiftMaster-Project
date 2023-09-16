@@ -52,7 +52,6 @@ export default function App() {
   // Maybe lock away pages if user is unverified
   useEffect(() => {
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log('user', user)
       setUser(user)
     })
 
