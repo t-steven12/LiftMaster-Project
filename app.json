@@ -1,21 +1,28 @@
 {
   "expo": {
-    "name": "galaxiesFire",
-    "slug": "galaxiesFire",
+    "name": "Lift Master",
+    "slug": "LiftMaster",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/appIcon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/logoSplash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#e4ab00"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "requireFullScreen": true,
+      "icon": "./assets/appIcon.png",
+      "splash": {
+        "image": "./assets/logoSplash.png",
+        "resizeMode": "cover",
+        "backgroundColor": "#e4ab00"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +32,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "PORTRAIT"
+        }
+      ]
+    ]
   }
 }
