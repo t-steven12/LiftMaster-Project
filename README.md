@@ -4,9 +4,9 @@ Lift Master is a React Native mobile application where users can track weightlif
 Users can create, read, edit, and delete exercises they have logged into the application.
 
 ## Installation/Instructions
-First, please download Expo Go in the Apple App Store(You can follow this link for download: https://expo.dev/client). Currently, the application has only been built for iOS.
+First, please download Expo Go in the Apple App Store(You can open this link for download: https://expo.dev/client). Currently, the application is only built for iOS.
 
-Second, scan the QR code below with your iOS device camera or follow this link: (Link and QR code not available yet)
+Second, open the following link on your iOS device with the Expo Go app installed: exp://u.expo.dev/update/48471caf-351e-44f7-aaf7-1208e7e13a7c
 
 The application should now build in the Expo Go app and can be accessed there. Lift Master should automatically be open after scanning the QR code or following the given link.
 
