@@ -33,10 +33,10 @@ const Stack = createNativeStackNavigator()
 
 const InsideStack = createNativeStackNavigator<RootStackParamList>()
 
-function InsideLayout({ route }: any) {
+function InsideLayout() {
   return (
     <InsideStack.Navigator screenOptions={{ contentStyle: { backgroundColor: '#3D3E3E' } }}>
-      <InsideStack.Screen name='Dashboard' component={Dashboard} options={{ headerShown: true, headerTitle: (route.params.userName ? route.params.userName : 'N/A') + "'s Dashboard", headerTitleStyle: { fontFamily: 'Orbitron_400Regular' }, headerStyle: { backgroundColor: '#e4ab00' }, headerShadowVisible: false, headerTintColor: 'black', headerBackTitleVisible: false }} />
+      <InsideStack.Screen name='Dashboard' component={Dashboard} options={{ headerShown: true, headerTitleStyle: { fontFamily: 'Orbitron_400Regular' }, headerStyle: { backgroundColor: '#e4ab00' }, headerShadowVisible: false, headerTintColor: 'black', headerBackTitleVisible: false }} />
       <InsideStack.Screen name='Lifts' component={Lifts} options={{ gestureEnabled: false, headerTitle: 'Your Lifts', headerTitleStyle: { fontFamily: 'Orbitron_400Regular' }, headerStyle: { backgroundColor: '#e4ab00' }, headerShadowVisible: false, headerTintColor: 'black', headerBackTitleVisible: false }} />
       <InsideStack.Screen name='AccountDetails' component={AccountDetails} options={{ headerTitle: 'Your Account Details', headerTitleStyle: { fontFamily: 'Orbitron_400Regular' }, headerStyle: { backgroundColor: '#e4ab00' }, headerShadowVisible: false, headerTintColor: 'black', headerBackTitleVisible: false }} />
     </InsideStack.Navigator>

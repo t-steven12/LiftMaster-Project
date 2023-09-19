@@ -8,6 +8,7 @@ import { Unsubscribe, User, onAuthStateChanged, sendEmailVerification } from 'fi
 import CustomText from '../components/CustomText'
 import CustomButton from '../components/CustomButton'
 import CustomPressableText from '../components/CustomPressableText'
+import { useIsFocused } from '@react-navigation/native'
 
 // Code for this component/file based on the following tutorials by Simon Grimm:
 // 1. https://www.youtube.com/watch?v=ONAVmsGW6-M&t=1172s
@@ -27,12 +28,24 @@ const Dashboard = ({ navigation }: NavProps) => {
   const [sets, setSets] = useState<string>('')
   const [reps, setReps] = useState<string>('')
 
-  // Following 5 lines are based on code from the following: https://stackoverflow.com/questions/42762443/how-can-i-unsubscribe-to-onauthstatechanged
-  const authListiner = onAuthStateChanged(FIREBASE_AUTH, (user) => {
-    if (user) setUserInfo(user)
-  });
+  // The following 14 lines are based on code from the useIsFocused hook documentation found here: https://reactnavigation.org/docs/function-after-focusing-screen/#re-rendering-screen-with-the-useisfocused-hook
+  const isFocused = useIsFocused()
 
-  authListiner();
+  useEffect(() => {
+    // The following lines using "authListener" and onAuthStateChanged() are based on code from the following: https://stackoverflow.com/questions/42762443/how-can-i-unsubscribe-to-onauthstatechanged
+    const authListiner = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      // console.log("Dashboard is focused")
+      navigation.setOptions({
+        headerTitle: (user?.displayName || "N/A") + "'s Dashboard"
+      })
+      if (user) {
+        setUserInfo(user)
+      }
+    });
+
+    return authListiner();
+
+  }, [isFocused])
 
   const logOut = () => {
     FIREBASE_AUTH.signOut()
