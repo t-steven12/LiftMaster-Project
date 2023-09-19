@@ -28,7 +28,7 @@ const Dashboard = ({ navigation }: NavProps) => {
   const [sets, setSets] = useState<string>('')
   const [reps, setReps] = useState<string>('')
 
-  // The following 14 lines are based on code from the useIsFocused hook documentation found here: https://reactnavigation.org/docs/function-after-focusing-screen/#re-rendering-screen-with-the-useisfocused-hook
+  // The following 17 lines are based on code from the useIsFocused hook documentation found here: https://reactnavigation.org/docs/function-after-focusing-screen/#re-rendering-screen-with-the-useisfocused-hook
   const isFocused = useIsFocused()
 
   useEffect(() => {
