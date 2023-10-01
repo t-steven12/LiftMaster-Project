@@ -12,6 +12,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import CreateEditForm from '../components/CreateEditForm'
 import CustomText from '../components/CustomText'
 import { FontAwesome } from '@expo/vector-icons';
+import SearchForm from '../components/SearchForm'
 
 // Code involved in type checking React Navigation screens based on code found here: https://reactnavigation.org/docs/typescript/
 type NavProps = NativeStackScreenProps<RootStackParamList, 'Lifts'>
@@ -25,6 +26,8 @@ const Lifts = ({ route, navigation }: NavProps) => {
   const [firstRenderHappened, setFirstRenderHappened] = useState(false)
   const [sortByAscDate, setSortByAscDate] = useState(false)
   const [activityIndicator, setActivityIndicator] = useState(false)
+  const [editOrSearchForm, setEditOrSearchForm] = useState('search')
+  const searchStringRef = useRef("")
 
   // use can probably add/edit/remove styles using useState for a style array
 
@@ -87,14 +90,25 @@ const Lifts = ({ route, navigation }: NavProps) => {
     let userLiftsSnapshot: QuerySnapshot<DocumentData, DocumentData>
 
     console.log(sortByAscDate)
+    console.log(searchStringRef.current)
 
     // call activity indicator state in this function!
     setActivityIndicator(prev => !prev)
 
     if (sortByAscDate === true) {
-      userLiftsSnapshot = await getDocs(userLiftsQueryAsc)
+      // search string stuff added for search form
+      if (searchStringRef.current != '') {
+        userLiftsSnapshot = await getDocs(query(liftsCollection, where('owner', "==", route.params.userId), where('liftName', "==", searchStringRef.current.toLowerCase()), orderBy('date', 'asc')))
+      } else {
+        userLiftsSnapshot = await getDocs(userLiftsQueryAsc)
+      }
     } else {
-      userLiftsSnapshot = await getDocs(userLiftsQuery)
+      if (searchStringRef.current != '') {
+        console.log("Descending search")
+        userLiftsSnapshot = await getDocs(query(liftsCollection, where('owner', "==", route.params.userId), where('liftName', "==", searchStringRef.current.toLowerCase()), orderBy('date', 'desc')))
+      } else {
+        userLiftsSnapshot = await getDocs(userLiftsQuery)
+      }
     }
 
     // The following code to update 'liftsArray' based on code from the following: https://www.techiediaries.com/react-usestate-hook-update-array/
@@ -158,6 +172,28 @@ const Lifts = ({ route, navigation }: NavProps) => {
     return 1
   }
 
+  // functions below were added for search Form
+
+  const openSearchForm = () => {
+    setEditOrSearchForm('search')
+    setTranslationValueToZero()
+  }
+
+  const openEditForm = (lift: QueryDocumentSnapshot) => {
+    setEditOrSearchForm('edit')
+    setCurrentLiftSnapshot(lift)
+    setTranslationValueToZero()
+  }
+
+  
+  // If search has been initiated 
+  const searchLift = (liftSearchQueryString: string) => {
+    console.log(liftSearchQueryString)
+    // setSearchString(liftSearchQueryString)
+    searchStringRef.current = liftSearchQueryString
+    getUserLiftsSnapshot()
+  }
+
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -169,7 +205,10 @@ const Lifts = ({ route, navigation }: NavProps) => {
           </Pressable>
         </View>
         <View style={{ ...styles.tableHeaders, width: '26%' }}>
-          <CustomText style={{ color: 'white', fontSize: 10 }}>Lift</CustomText>
+          <Pressable style={{ alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', gap: 5 }} onPress={() => openSearchForm()}>
+            <CustomText style={{ color: 'white', fontSize: 10 }}>Lift</CustomText>
+            <FontAwesome name="search" size={24} color="black" />
+          </Pressable>
         </View>
         <View style={{ ...styles.tableHeaders, width: '14%' }}>
           <CustomText style={{ color: 'white', fontSize: 10 }}>Lbs</CustomText>
@@ -221,7 +260,7 @@ const Lifts = ({ route, navigation }: NavProps) => {
                 </CustomText>
               </View>
               <View style={{ borderWidth: 1, width: '10%', maxHeight: 50, justifyContent: 'center', alignItems: 'center' }}>
-                <Pressable style={styles.deleteAndEditButton} onPress={() => { setTranslationValueToZero() && setCurrentLiftSnapshot(lift) }}>
+                <Pressable style={styles.deleteAndEditButton} onPress={() => openEditForm(lift)}>
                   <Entypo name="edit" size={30} color="white" />
                 </Pressable>
               </View>
@@ -236,7 +275,7 @@ const Lifts = ({ route, navigation }: NavProps) => {
       )}
       <PanGestureHandler onGestureEvent={gestureHandler}>
         <Animated.View style={[styles.editPanel, animatedTranslationStyle]}>
-          <CreateEditForm currLiftSnapshot={currentLiftSnapshot} updateList={() => getUserLiftsSnapshot()} />
+          {editOrSearchForm == 'search' ? <SearchForm searchLift={(liftSearchQueryString: string) => searchLift(liftSearchQueryString)} /> : <CreateEditForm currLiftSnapshot={currentLiftSnapshot} updateList={() => getUserLiftsSnapshot()} />}
           <Entypo name="chevron-right" size={36} color="black" style={{ position: 'absolute', transform: [{ translateY: heightOfEditPanel / 2 - 18 }] }} />
         </Animated.View>
       </PanGestureHandler>
