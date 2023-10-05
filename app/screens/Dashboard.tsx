@@ -27,6 +27,7 @@ const Dashboard = ({ navigation }: NavProps) => {
   const [weight, setWeight] = useState<string>('')
   const [sets, setSets] = useState<string>('')
   const [reps, setReps] = useState<string>('')
+  const [oneRepMax, setOneRepMax] = useState<string | number>("N/A")
 
   // The following 17 lines are based on code from the useIsFocused hook documentation found here: https://reactnavigation.org/docs/function-after-focusing-screen/#re-rendering-screen-with-the-useisfocused-hook
   const isFocused = useIsFocused()
@@ -65,7 +66,7 @@ const Dashboard = ({ navigation }: NavProps) => {
       if (validateValues(weight, reps, sets)) {
         try {
           const today = new Date()
-          await addDoc(collection(FIRESTORE_DB, 'lifts'), { liftName: liftName.toLowerCase(), weight: parseInt(weight), sets: parseInt(sets), reps: parseInt(reps), owner: userInfo.uid, date: today })
+          await addDoc(collection(FIRESTORE_DB, 'lifts'), { liftName: liftName.toLowerCase(), weight: parseInt(weight), sets: parseInt(sets), reps: parseInt(reps), oneRepMax: oneRepMax, owner: userInfo.uid, date: today })
           resetAndCancelAddLiftForm()
           alert('Lift added!')
         } catch (error) {
@@ -123,6 +124,23 @@ const Dashboard = ({ navigation }: NavProps) => {
     setLiftForm(!liftForm)
   }
 
+  const calculate1RM = () => {
+    let oneRM: string | number = "N/A"
+    if (weight !== '' && reps !== '') {
+      if (parseInt(reps) > 1) {
+        // Epley 1RM formula
+        oneRM = Math.round(parseInt(weight) * (1 + (parseInt(reps) / 30)))
+      } else if (parseInt(reps) == 1) {
+        oneRM = parseInt(weight)
+      }
+    }
+    setOneRepMax(oneRM)
+  }
+
+  useEffect(() => {
+    calculate1RM()
+  }, [weight, reps])
+
   return (
     // Code below related to use of TouchableWithoutFeedback to dismiss keyboard based on code from the following: https://www.geeksforgeeks.org/how-to-dismiss-the-keyboard-in-react-native-without-clicking-the-return-button/
     // Do not style TouchableWithoutFeedback. Make container inside and style that
@@ -176,8 +194,13 @@ const Dashboard = ({ navigation }: NavProps) => {
                     maxLength={3}
                     onChangeText={text => setReps(text)}
                   />
+                  <View style={{ alignItems: 'center', margin: 8 }}>
+                    <CustomText style={{ color: 'white' }}>Estimated One-Rep Max(1RM)*:</CustomText>
+                    <CustomText style={{ color: 'white' }}>{oneRepMax} lbs</CustomText>
+                  </View>
                   <CustomButton style={{ borderRadius: 5, backgroundColor: '#e4ab00', margin: 8 }} onPress={() => isUserVerified() && createLift()}>Submit</CustomButton>
                   <CustomButton style={{ borderRadius: 5, backgroundColor: '#e4ab00', margin: 8 }} onPress={() => resetAndCancelAddLiftForm()}>Cancel</CustomButton>
+                  <CustomText style={{ fontSize: 10, margin: 10 }}>*Based on the Epley formula for calculating one-rep max estimates which uses the weight lifted and the repitions performed; please use the 1RM value generated purely as an estimate</CustomText>
                 </KeyboardAvoidingView>
               </>
             )

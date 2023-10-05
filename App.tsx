@@ -13,6 +13,7 @@ import AccountDetails from './app/screens/AccountDetails';
 import { useFonts, Orbitron_400Regular } from '@expo-google-fonts/orbitron';
 import * as SplashScreen from 'expo-splash-screen'
 import * as ScreenOrientation from 'expo-screen-orientation'
+import { MenuProvider } from 'react-native-popup-menu';
 
 // Code for this component/file based on the following tutorials by Simon Grimm:
 // 1. https://www.youtube.com/watch?v=ONAVmsGW6-M&t=1172s
@@ -77,11 +78,13 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer onReady={onReadyRootView}>
-      <Stack.Navigator screenOptions={{ contentStyle: { backgroundColor: '#3D3E3E' } }}>
-        {user ? (<Stack.Screen name='Inside' component={InsideLayout} options={{ headerShown: false }} initialParams={{ userName: user.displayName }} />) :
-          (<Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />)}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <MenuProvider>
+      <NavigationContainer onReady={onReadyRootView}>
+        <Stack.Navigator screenOptions={{ contentStyle: { backgroundColor: '#3D3E3E' } }}>
+          {user ? (<Stack.Screen name='Inside' component={InsideLayout} options={{ headerShown: false }} initialParams={{ userName: user.displayName }} />) :
+            (<Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />)}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </MenuProvider>
   );
 }

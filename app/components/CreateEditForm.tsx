@@ -5,6 +5,7 @@ import { DocumentData, DocumentReference, QueryDocumentSnapshot, addDoc, collect
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { Dimensions } from 'react-native'
 import CustomButton from './CustomButton'
+import CustomText from './CustomText'
 
 type currentLift = {
   currLiftSnapshot: QueryDocumentSnapshot | undefined
@@ -19,6 +20,7 @@ const CreateEditForm = ({ currLiftSnapshot, updateList }: currentLift) => {
   const [weight, setWeight] = useState<string>('')
   const [sets, setSets] = useState<string>('')
   const [reps, setReps] = useState<string>('')
+  const [oneRepMax, setOneRepMax] = useState<string | number>('N/A')
 
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const CreateEditForm = ({ currLiftSnapshot, updateList }: currentLift) => {
       if (validateValues(weight, reps, sets) && currLiftSnapshot !== undefined) {
         try {
           const today = new Date()
-          await updateDoc(currLiftSnapshot.ref, { liftName: liftName.toLowerCase(), weight: parseInt(weight), sets: parseInt(sets), reps: parseInt(reps) })
+          await updateDoc(currLiftSnapshot.ref, { liftName: liftName.toLowerCase(), weight: parseInt(weight), sets: parseInt(sets), reps: parseInt(reps), oneRepMax: oneRepMax })
           setLiftForm(!liftForm)
           // Update the lifts list to reflect the updated lift
           updateList()
@@ -93,6 +95,23 @@ const CreateEditForm = ({ currLiftSnapshot, updateList }: currentLift) => {
     }
   }
 
+  const calculate1RM = () => {
+    let oneRM: string | number = "N/A"
+    if (weight !== '' && reps !== '') {
+      if (parseInt(reps) > 1) {
+        // Epley 1RM formula
+        oneRM = Math.round(parseInt(weight) * (1 + (parseInt(reps) / 30)))
+      } else if (parseInt(reps) == 1) {
+        oneRM = parseInt(weight)
+      }
+    }
+    setOneRepMax(oneRM)
+  }
+
+  useEffect(() => {
+    calculate1RM()
+  }, [weight, reps])
+
   return (
     <>
       {/* Use of TouchableWithoutFeedback to dismiss keyboard based on the following: https://www.geeksforgeeks.org/how-to-dismiss-the-keyboard-in-react-native-without-clicking-the-return-button/ */}
@@ -144,8 +163,16 @@ const CreateEditForm = ({ currLiftSnapshot, updateList }: currentLift) => {
               onChangeText={text => setReps(text)}
             />
           </View>
+          <View style={{ alignItems: 'center', margin: 8 }}>
+            <CustomText style={{ color: 'white' }}>Estimated</CustomText>
+            <CustomText style={{ color: 'white' }}>One-Rep Max(1RM)*:</CustomText>
+            <CustomText style={{ color: 'white' }}>{oneRepMax} lbs</CustomText>
+          </View>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <CustomButton style={styles.submitAndCancelButtonsContainer} onPress={editLift}>Submit</CustomButton>
+          </View>
+          <View>
+            <CustomText style={{ fontSize: 9, margin: 15 }}>*Based on the Epley formula for calculating one-rep max estimates which uses the weight lifted and the repitions performed; please use the 1RM value generated purely as an estimate</CustomText>
           </View>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>

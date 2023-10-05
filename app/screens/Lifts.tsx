@@ -13,6 +13,12 @@ import CreateEditForm from '../components/CreateEditForm'
 import CustomText from '../components/CustomText'
 import { FontAwesome } from '@expo/vector-icons';
 import SearchForm from '../components/SearchForm'
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
 // Code involved in type checking React Navigation screens based on code found here: https://reactnavigation.org/docs/typescript/
 type NavProps = NativeStackScreenProps<RootStackParamList, 'Lifts'>
@@ -89,8 +95,8 @@ const Lifts = ({ route, navigation }: NavProps) => {
   const getUserLiftsSnapshot = async () => {
     let userLiftsSnapshot: QuerySnapshot<DocumentData, DocumentData>
 
-    console.log(sortByAscDate)
-    console.log(searchStringRef.current)
+    // console.log(sortByAscDate)
+    // console.log(searchStringRef.current)
 
     // call activity indicator state in this function!
     setActivityIndicator(prev => !prev)
@@ -185,7 +191,7 @@ const Lifts = ({ route, navigation }: NavProps) => {
     setTranslationValueToZero()
   }
 
-  
+
   // If search has been initiated 
   const searchLift = (liftSearchQueryString: string) => {
     console.log(liftSearchQueryString)
@@ -210,20 +216,20 @@ const Lifts = ({ route, navigation }: NavProps) => {
             <FontAwesome name="search" size={24} color="black" />
           </Pressable>
         </View>
-        <View style={{ ...styles.tableHeaders, width: '14%' }}>
+        <View style={{ ...styles.tableHeaders, width: '13%' }}>
           <CustomText style={{ color: 'white', fontSize: 10 }}>Lbs</CustomText>
         </View>
-        <View style={{ ...styles.tableHeaders, width: '12%' }}>
+        <View style={{ ...styles.tableHeaders, width: '10%' }}>
           <CustomText style={{ color: 'white', fontSize: 10 }}>Sets</CustomText>
         </View>
-        <View style={{ ...styles.tableHeaders, width: '12%' }}>
+        <View style={{ ...styles.tableHeaders, width: '10%' }}>
           <CustomText style={{ color: 'white', fontSize: 10 }}>Reps</CustomText>
         </View>
-        <View style={{ ...styles.tableHeaders, width: '10%' }}>
-          <CustomText style={{ color: 'white', fontSize: 10 }}>Edit</CustomText>
+        <View style={{ ...styles.tableHeaders, width: '13%' }}>
+          <CustomText style={{ color: 'white', fontSize: 10 }}>1RM{'\n'}(Lbs)</CustomText>
         </View>
-        <View style={{ ...styles.tableHeaders, width: '10%' }}>
-          <CustomText style={{ color: 'white', fontSize: 10 }}>Del</CustomText>
+        <View style={{ ...styles.tableHeaders, width: '12%' }}>
+          <CustomText style={{ color: 'white', fontSize: 10 }}>Opt</CustomText>
         </View>
       </View>
       {activityIndicator ? (
@@ -244,31 +250,52 @@ const Lifts = ({ route, navigation }: NavProps) => {
                   {lift.data().liftName}
                 </CustomText>
               </ScrollView>
-              <View style={{ ...styles.cellContainers, borderWidth: 1, width: '14%' }}>
+              <View style={{ ...styles.cellContainers, borderWidth: 1, width: '13%' }}>
                 <CustomText style={{ color: 'white', fontSize: 10 }}>
                   {lift.data().weight}
                 </CustomText>
               </View>
-              <View style={{ ...styles.cellContainers, borderWidth: 1, width: '12%' }}>
+              <View style={{ ...styles.cellContainers, borderWidth: 1, width: '10%' }}>
                 <CustomText style={{ color: 'white', fontSize: 10 }}>
                   {lift.data().sets}
                 </CustomText>
               </View>
-              <View style={{ borderWidth: 1, width: '12%', justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ borderWidth: 1, width: '10%', justifyContent: 'center', alignItems: 'center' }}>
                 <CustomText style={{ color: 'white', fontSize: 10 }}>
                   {lift.data().reps}
                 </CustomText>
               </View>
-              <View style={{ borderWidth: 1, width: '10%', maxHeight: 50, justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ borderWidth: 1, width: '13%', justifyContent: 'center', alignItems: 'center' }}>
+                <CustomText style={{ color: 'white', fontSize: 10 }}>
+                  {lift.data().oneRepMax}
+                </CustomText>
+              </View>
+              {/* <View style={{ borderWidth: 1, width: '10%', maxHeight: 50, justifyContent: 'center', alignItems: 'center' }}>
                 <Pressable style={styles.deleteAndEditButton} onPress={() => openEditForm(lift)}>
                   <Entypo name="edit" size={30} color="white" />
                 </Pressable>
-              </View>
-              <View style={{ borderWidth: 1, width: '10%', maxHeight: 50, justifyContent: 'center', alignItems: 'center' }}>
+              </View> */}
+              {/* <View style={{ borderWidth: 1, width: '10%', maxHeight: 50, justifyContent: 'center', alignItems: 'center' }}>
                 <Pressable style={styles.deleteAndEditButton} onPress={() => deleteWarning(lift)}>
                   <Ionicons name="trash" size={30} color="white" />
                 </Pressable>
-              </View>
+              </View> */}
+              <Menu style={{ borderWidth: 1, width: '12%', maxHeight: 50, justifyContent: 'center', alignItems: 'center' }}>
+                <MenuTrigger customStyles={{triggerOuterWrapper: {height: "100%", width: "100%"}}} style={styles.deleteAndEditButton}>
+                  <Entypo name="dots-three-vertical" size={30} color="white" />
+                </MenuTrigger>
+                <MenuOptions customStyles={{ optionsContainer: { width: 100 }, optionWrapper: { backgroundColor: 'white', borderWidth: 1, height: 40 } }}>
+                  <MenuOption onSelect={() => openEditForm(lift)}>
+                    <CustomText>Edit</CustomText>
+                  </MenuOption>
+                  <MenuOption onSelect={() => deleteWarning(lift)}>
+                    <CustomText>Delete</CustomText>
+                  </MenuOption>
+                </MenuOptions>
+              </Menu>
+              {/* <Pressable style={styles.deleteAndEditButton} onPress={() => openEditForm(lift)}>
+                  <Entypo name="edit" size={30} color="white" />
+                </Pressable> */}
             </View>
           ))}
         </ScrollView>

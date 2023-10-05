@@ -13,6 +13,11 @@ const SearchForm = ({ searchLift }: SearchFormProps) => {
 
   const [searchString, setSearchString] = useState('')
 
+  const clearSearch = () => {
+    setSearchString('')
+    searchLift('')
+  }
+
   return (
     <>
       {/* Use of TouchableWithoutFeedback to dismiss keyboard based on the following: https://www.geeksforgeeks.org/how-to-dismiss-the-keyboard-in-react-native-without-clicking-the-return-button/ */}
@@ -33,6 +38,7 @@ const SearchForm = ({ searchLift }: SearchFormProps) => {
           </View>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <CustomButton style={styles.submitAndCancelButtonsContainer} onPress={() => searchLift(searchString)}>Submit</CustomButton>
+            <CustomButton style={styles.submitAndCancelButtonsContainer} onPress={() => clearSearch()}>Clear Search</CustomButton>
           </View>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
@@ -66,7 +72,7 @@ const styles = StyleSheet.create({
     padding: 5
   },
   submitAndCancelButtonsContainer: {
-    margin: 10,
+    margin: 8,
     height: 30,
     width: 80,
     justifyContent: 'center',
