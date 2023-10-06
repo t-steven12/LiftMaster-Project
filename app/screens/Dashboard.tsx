@@ -200,7 +200,7 @@ const Dashboard = ({ navigation }: NavProps) => {
                   </View>
                   <CustomButton style={{ borderRadius: 5, backgroundColor: '#e4ab00', margin: 8 }} onPress={() => isUserVerified() && createLift()}>Submit</CustomButton>
                   <CustomButton style={{ borderRadius: 5, backgroundColor: '#e4ab00', margin: 8 }} onPress={() => resetAndCancelAddLiftForm()}>Cancel</CustomButton>
-                  <CustomText style={{ fontSize: 10, margin: 10 }}>*Based on the Epley formula for calculating one-rep max estimates which uses the weight lifted and the repitions performed; please use the 1RM value generated purely as an estimate</CustomText>
+                  <CustomText style={{ fontSize: 10, margin: 10 }}>*Based on the Epley formula for calculating one-rep max estimates which uses the weight lifted and the repetitions performed; please use the 1RM value generated purely as an estimate</CustomText>
                 </KeyboardAvoidingView>
               </>
             )

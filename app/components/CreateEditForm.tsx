@@ -172,7 +172,7 @@ const CreateEditForm = ({ currLiftSnapshot, updateList }: currentLift) => {
             <CustomButton style={styles.submitAndCancelButtonsContainer} onPress={editLift}>Submit</CustomButton>
           </View>
           <View>
-            <CustomText style={{ fontSize: 9, margin: 15 }}>*Based on the Epley formula for calculating one-rep max estimates which uses the weight lifted and the repitions performed; please use the 1RM value generated purely as an estimate</CustomText>
+            <CustomText style={{ fontSize: 9, margin: 15 }}>*Based on the Epley formula for calculating one-rep max estimates which uses the weight lifted and the repetitions performed; please use the 1RM value generated purely as an estimate</CustomText>
           </View>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
