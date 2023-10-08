@@ -42,7 +42,7 @@ const Login = () => {
         setEmail('')
         setPassword('')
         setUsername('')
-        alert('Please check your email to verify your address!')
+        alert('Please log out and check your email to verify your address!')
       })
       .catch((error) => {
         setEmail('')
