@@ -17,12 +17,6 @@
     "ios": {
       "supportsTablet": true,
       "requireFullScreen": true
-      // "icon": "./assets/appIcon.png",
-      // "splash": {
-      //   "image": "./assets/logoSplash.png",
-      //   "resizeMode": "cover",
-      //   "backgroundColor": "#e4ab00"
-      // }
     },
     "android": {
       "adaptiveIcon": {
@@ -39,7 +33,8 @@
         {
           "initialOrientation": "PORTRAIT"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "extra": {
       "eas": {
